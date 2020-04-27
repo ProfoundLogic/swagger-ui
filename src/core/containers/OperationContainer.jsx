@@ -65,6 +65,9 @@ export default class OperationContainer extends PureComponent {
       props.specSelectors.allowTryItOutFor(props.path, props.method) : props.allowTryItOut)
     const security = op.getIn(["operation", "security"]) || props.specSelectors.security()
 
+    let uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
+    let isShown = uniqueRoute ? true:  layoutSelectors.isShown(isShownKey, docExpansion === "full" );
+
     return {
       operationId,
       isDeepLinkingEnabled,
@@ -74,7 +77,7 @@ export default class OperationContainer extends PureComponent {
       allowTryItOut,
       security,
       isAuthorized: props.authSelectors.isAuthorized(security),
-      isShown: layoutSelectors.isShown(isShownKey, docExpansion === "full" ),
+      isShown: isShown,
       jumpToKey: `paths.${props.path}.${props.method}`,
       response: props.specSelectors.responseFor(props.path, props.method),
       request: props.specSelectors.requestFor(props.path, props.method)

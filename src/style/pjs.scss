@@ -1,0 +1,90 @@
+.pjs-filter-container
+{
+    display:flex;
+}
+
+.pjs-api-column-full
+{
+    width: 100%;
+}
+
+.pjs-api-column-partial
+{
+    width: 100%;
+}
+
+.pjs-api-search-column
+{
+    width: 25%;
+}
+
+
+
+
+// PJS Overrides
+.wrapper
+{
+    padding: 2px 2px 0px 2px;
+}
+
+textarea.body-param__text
+{
+    max-width: 100%;
+    resize: none;
+}
+
+.opblock
+{
+    margin: 0px;
+}
+
+.parameters-container>.opblock-description-wrapper
+{
+    margin: 10px 10px;
+}
+
+.parameters-container
+{
+    margin-bottom: -10px
+}
+
+.opblock-description-wrapper,
+.opblock-external-docs-wrapper,
+.opblock-title_normal
+{
+    padding: 0px 10px;
+}
+
+.execute-wrapper
+{
+    padding: 10px;
+}
+
+.responses-inner
+{
+    padding: 10px;
+}
+
+.topbar
+{
+    display: none;
+}
+
+.parameters-col_description
+{
+    width: 70%; 
+    input[type=text]
+    {
+        max-width: 100%;
+    }
+}
+
+.parameter__name
+{
+    width: 30%; 
+}
+
+.table-container
+{
+    padding: 10px;
+}

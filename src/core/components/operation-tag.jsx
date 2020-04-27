@@ -54,10 +54,13 @@ export default class OperationTag extends React.Component {
 
     let isShownKey = ["operations-tag", tag]
     let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
+    let uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
+    if (uniqueRoute) showTag = true;
 
     return (
       <div className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} >
 
+        { uniqueRoute ? null :
         <h4
           onClick={() => layoutActions.show(isShownKey, !showTag)}
           className={!tagDescription ? "opblock-tag no-desc" : "opblock-tag" }
@@ -102,6 +105,7 @@ export default class OperationTag extends React.Component {
               </svg>
             </button>
         </h4>
+        }
 
         <Collapse isOpened={showTag}>
           {children}

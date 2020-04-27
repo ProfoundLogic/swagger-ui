@@ -50,6 +50,10 @@ export default class OperationSummary extends PureComponent {
     } = op
 
     let security = operationProps.get("security")
+    let uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
+    if (uniqueRoute) {
+      return (<div></div>);
+    }
 
     const AuthorizeOperationBtn = getComponent("authorizeOperationBtn")
     const OperationSummaryMethod = getComponent("OperationSummaryMethod")
@@ -57,8 +61,8 @@ export default class OperationSummary extends PureComponent {
     const JumpToPath = getComponent("JumpToPath", true)
 
     return (
-
-      <div className={`opblock-summary opblock-summary-${method}`} onClick={toggleShown} >
+      
+        <div className={`opblock-summary opblock-summary-${method}`} onClick={toggleShown} >
         <OperationSummaryMethod method={method} />
         <OperationSummaryPath getComponent={getComponent} operationProps={operationProps} specPath={specPath} />
 

@@ -83,18 +83,21 @@ export default class BaseLayout extends React.Component {
     const hasServers = servers && servers.size
     const hasSchemes = schemes && schemes.size
     const hasSecurityDefinitions = !!specSelectors.securityDefinitions()
-
+    const uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
+        
     return (
 
       <div className='swagger-ui'>
           <SvgAssets />
           <VersionPragmaFilter isSwagger2={isSwagger2} isOAS3={isOAS3} alsoShow={<Errors/>}>
             <Errors/>
-            <Row className="information-container">
-              <Col mobile={12}>
-                <InfoContainer/>
-              </Col>
-            </Row>
+            {uniqueRoute ? null :
+              <Row className="information-container">
+                <Col mobile={12}>
+                  <InfoContainer/>
+                </Col>
+              </Row>
+            }
 
             {hasServers || hasSchemes || hasSecurityDefinitions ? (
               <div className="scheme-container">
@@ -106,6 +109,10 @@ export default class BaseLayout extends React.Component {
               </div>
             ) : null}
 
+          <Row className="pjs-filter-container">
+          { uniqueRoute ? null : <Col className="pjs-api-search-column">This is the search box</Col> }
+
+          <Col className="pjs-api-column">
             <FilterContainer/>
 
             <Row>
@@ -118,6 +125,8 @@ export default class BaseLayout extends React.Component {
                 <Models/>
               </Col>
             </Row>
+            </Col>
+          </Row>
           </VersionPragmaFilter>
         </div>
       )
