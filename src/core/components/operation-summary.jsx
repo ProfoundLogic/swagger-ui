@@ -50,8 +50,8 @@ export default class OperationSummary extends PureComponent {
     } = op
 
     let security = operationProps.get("security")
-    let uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
-    if (uniqueRoute) {
+    let isSpecificRoute = window.isSpecificRoute;
+    if (isSpecificRoute) {
       return (<div></div>);
     }
 

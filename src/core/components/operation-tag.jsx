@@ -54,57 +54,57 @@ export default class OperationTag extends React.Component {
 
     let isShownKey = ["operations-tag", tag]
     let showTag = layoutSelectors.isShown(isShownKey, docExpansion === "full" || docExpansion === "list")
-    let uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
-    if (uniqueRoute) showTag = true;
+    let isSpecificRoute = window.isSpecificRoute;
+    if (isSpecificRoute) showTag = true;
 
     return (
       <div className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} >
 
-        { uniqueRoute ? null :
-        <h4
-          onClick={() => layoutActions.show(isShownKey, !showTag)}
-          className={!tagDescription ? "opblock-tag no-desc" : "opblock-tag" }
-          id={isShownKey.map(v => escapeDeepLinkPath(v)).join("-")}
-          data-tag={tag}
-          data-is-open={showTag}
+        {isSpecificRoute ? null :
+          <h4
+            onClick={() => layoutActions.show(isShownKey, !showTag)}
+            className={!tagDescription ? "opblock-tag no-desc" : "opblock-tag"}
+            id={isShownKey.map(v => escapeDeepLinkPath(v)).join("-")}
+            data-tag={tag}
+            data-is-open={showTag}
           >
-          <DeepLink
-            enabled={isDeepLinkingEnabled}
-            isShown={showTag}
-            path={createDeepLinkPath(tag)}
-            text={tag} />
-          { !tagDescription ? <small></small> :
-            <small>
+            <DeepLink
+              enabled={isDeepLinkingEnabled}
+              isShown={showTag}
+              path={createDeepLinkPath(tag)}
+              text={tag} />
+            {!tagDescription ? <small></small> :
+              <small>
                 <Markdown source={tagDescription} />
               </small>
             }
 
             <div>
-              { !tagExternalDocsDescription ? null :
+              {!tagExternalDocsDescription ? null :
                 <small>
-                    { tagExternalDocsDescription }
-                      { tagExternalDocsUrl ? ": " : null }
-                      { tagExternalDocsUrl ?
-                        <Link
-                            href={sanitizeUrl(tagExternalDocsUrl)}
-                            onClick={(e) => e.stopPropagation()}
-                            target="_blank"
-                            >{tagExternalDocsUrl}</Link> : null
-                          }
-                  </small>
-                }
+                  {tagExternalDocsDescription}
+                  {tagExternalDocsUrl ? ": " : null}
+                  {tagExternalDocsUrl ?
+                    <Link
+                      href={sanitizeUrl(tagExternalDocsUrl)}
+                      onClick={(e) => e.stopPropagation()}
+                      target="_blank"
+                    >{tagExternalDocsUrl}</Link> : null
+                  }
+                </small>
+              }
             </div>
 
             <button
               className="expand-operation"
-              title={showTag ? "Collapse operation": "Expand operation"}
+              title={showTag ? "Collapse operation" : "Expand operation"}
               onClick={() => layoutActions.show(isShownKey, !showTag)}>
 
               <svg className="arrow" width="20" height="20">
                 <use href={showTag ? "#large-arrow-down" : "#large-arrow"} xlinkHref={showTag ? "#large-arrow-down" : "#large-arrow"} />
               </svg>
             </button>
-        </h4>
+          </h4>
         }
 
         <Collapse isOpened={showTag}>

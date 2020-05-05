@@ -98,7 +98,7 @@ export default class Parameters extends Component {
       operation
     } = this.props
 
-    let uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
+    let isSpecificRoute = window.isSpecificRoute;
     
     const ParameterRow = getComponent("parameterRow")
     const TryItOutButton = getComponent("TryItOutButton")
@@ -131,7 +131,7 @@ export default class Parameters extends Component {
             <h4 className="opblock-title">Parameters</h4>
           </div>
           )}
-            { !uniqueRoute && allowTryItOut ? (
+            { !isSpecificRoute && allowTryItOut ? (
               <TryItOutButton enabled={ tryItOutEnabled } onCancelClick={ onCancelClick } onTryoutClick={ onTryoutClick } />
             ) : null }
         </div>

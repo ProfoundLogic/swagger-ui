@@ -65,8 +65,8 @@ export default class OperationContainer extends PureComponent {
       props.specSelectors.allowTryItOutFor(props.path, props.method) : props.allowTryItOut)
     const security = op.getIn(["operation", "security"]) || props.specSelectors.security()
 
-    let uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
-    let isShown = uniqueRoute ? true:  layoutSelectors.isShown(isShownKey, docExpansion === "full" );
+    let isSpecificRoute = window.isSpecificRoute;
+    let isShown = isSpecificRoute ? true:  layoutSelectors.isShown(isShownKey, docExpansion === "full" );
 
     return {
       operationId,

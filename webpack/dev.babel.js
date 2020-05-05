@@ -11,19 +11,17 @@ const devConfig = configBuilder(
   {
     minimize: false,
     mangle: false,
-    sourcemaps: true,
+    sourcemaps: false,
     includeDependencies: true,
   },
   {
     mode: "development",
     entry: {
       "swagger-ui-bundle": [
-        "./src/polyfills.js", // TODO: remove?
-        "./src/core/index.js",
+        "./src/core/index.js"
       ],
       "swagger-ui-standalone-preset": [
-        "./src/polyfills", // TODO: remove?
-        "./src/standalone/index.js",
+        "./src/standalone/index.js"
       ],
       "swagger-ui": "./src/style/main.scss",
     },

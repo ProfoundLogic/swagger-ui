@@ -1,22 +1,13 @@
-# Swagger UI Dist
-[![NPM version](https://badge.fury.io/js/swagger-ui-dist.svg)](http://badge.fury.io/js/swagger-ui-dist)
+# Profound.js Swagger UI
 
-# API
-
-This module, `swagger-ui-dist`, exposes Swagger-UI's entire dist folder as a dependency-free npm module.
-Use `swagger-ui` instead, if you'd like to have npm install dependencies for you.
-
-`SwaggerUIBundle` and `SwaggerUIStandalonePreset` can be imported:
-```javascript
-  import { SwaggerUIBundle, SwaggerUIStandalonePreset } from "swagger-ui-dist"
-```
+This module, `profound.js-swagger-ui`, extends swagger-ui-dist package as a dependency-free npm module.
+This package is designed to only be used internally by the Profound.js Server Framework.
 
 To get an absolute path to this directory for static file serving, use the exported `getAbsoluteFSPath` method:
 
 ```javascript
-const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath()
+const swaggerUIPath = require("profoundjs-swagger-ui").getAbsoluteFSPath()
 
-// then instantiate server that serves files from the swaggerUiAssetPath
 ```
 
 For anything else, check the [Swagger-UI](https://github.com/swagger-api/swagger-ui) repository.

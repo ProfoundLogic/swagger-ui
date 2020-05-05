@@ -13,6 +13,9 @@ docs/_book
 
 flavors/**/dist/*
 
+swagger-ui-dist-package/*.tgz
+
+
 # Cypress
 test/e2e-cypress/screenshots
 test/e2e-cypress/videos

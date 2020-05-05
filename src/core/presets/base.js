@@ -89,6 +89,9 @@ import BaseLayout from "core/components/layouts/base"
 import * as LayoutUtils from "core/components/layout-utils"
 import * as JsonSchemaComponents from "core/json-schema-components"
 
+import CategoryFilter from "core/components/category-filter"
+ 
+
 export default function() {
 
   let coreComponents = {
@@ -161,6 +164,7 @@ export default function() {
       Example,
       ExamplesSelect,
       ExamplesSelectValueRetainer,
+      CategoryFilter
     }
   }
 

@@ -8,14 +8,13 @@ const result = configBuilder(
   {
     minimize: true,
     mangle: true,
-    sourcemaps: true,
+    sourcemaps: false,
     includeDependencies: true,
   },
   {
     entry: {
       "swagger-ui-bundle": [
-        "./src/polyfills.js", // TODO: remove?
-        "./src/core/index.js",
+        "./src/core/index.js"
       ],
     },
 

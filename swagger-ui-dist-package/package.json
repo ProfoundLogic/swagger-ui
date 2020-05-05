@@ -1,9 +1,10 @@
 {
   "name": "profoundjs-swagger-ui",
-  "version": "3.25.1",
+  "version": "1.0.0",
   "main": "index.js",
   "contributors": [],
   "license": "Apache-2.0",
+  "author": "Profound Logic Software",
   "dependencies": {},
   "devDependencies": {}
 }

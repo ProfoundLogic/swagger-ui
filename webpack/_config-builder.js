@@ -46,7 +46,7 @@ export default function buildConfig(
   {
     minimize = true,
     mangle = true,
-    sourcemaps = true,
+    sourcemaps = false,
     includeDependencies = true,
   },
   customConfig
@@ -126,7 +126,7 @@ export default function buildConfig(
         : false,
 
       performance: {
-        hints: "error",
+        hints: false,
         maxEntrypointSize: 1024000,
         maxAssetSize: 1024000,
       },

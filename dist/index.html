@@ -28,17 +28,42 @@
   </style>
 </head>
 
-<body>
+<body style="margin:0px 10px;">
   <div id="swagger-ui"></div>
 
   <script src="./swagger-ui-bundle.js"> </script>
   <script src="./swagger-ui-standalone-preset.js"> </script>
   <script>
+    var url = document.location.href.replace(document.location.hash, "").replace(document.location.search, "");
+
+    var paths = url.split("/");
+    var lastPath = "";
+    for(var pCnt=paths.length;pCnt>0;pCnt--) {
+      lastPath = paths[paths.length-1];
+      if (lastPath) break;
+    }
+
+    if (!lastPath.match(/api/i))
+      url += "api/";
+    
+    url += "openapi.json";
+    
+    // Debugging this project with dummy data
+    // window.isdev = true;
+
+    // Debugging this project with live data
+    // url = "http://localhost:8081/api/openapi.json";
+
+    url += document.location.search;
+
+    window.isSpecificRoute = url.match(/(\?|&)route\=/i) != null;
+    if (window.isSpecificRoute)
+      document.body.style.margin = "0px"
+
     window.onload = function () {
-      const url = "/api/openapi.json";
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
-        url: url + document.location.search,
+        url: url,
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
@@ -53,12 +78,16 @@
       // End Swagger UI call region
 
       window.ui = ui;
+
       if (window.parent) {
         window.parent.showApiRoute = function (routeKey) {
-          ui.specActions.updateUrl(`${url}?route=${routeKey}`);
+          url = ui.specSelectors.url().split("?")[0];
+          url = `${url}?route=${routeKey}`;
+          ui.specActions.updateUrl(url);
           ui.specActions.download();
         }
       }
+
     }
   </script>
 </body>

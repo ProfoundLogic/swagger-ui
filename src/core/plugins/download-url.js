@@ -13,7 +13,7 @@ export default function downloadUrlPlugin (toolbox) {
       const config = getConfigs()
       url = url || specSelectors.url()
       specActions.updateLoadingStatus("loading")
-      errActions.clear({source: "fetch"})
+      errActions.clear({source: "fetch"})    
       fetch({
         url,
         loadSpec: true,

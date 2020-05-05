@@ -87,8 +87,8 @@ export default class Operation extends PureComponent {
     let operationScheme = specSelectors.operationScheme(path, method)
     let isShownKey = ["operations", tag, operationId]
     let extensions = getExtensions(operation)
-    let uniqueRoute = document.location.search && document.location.search.indexOf("route=") >=0;
-    if (uniqueRoute) 
+    let isSpecificRoute = window.isSpecificRoute;
+    if (isSpecificRoute) 
       tryItOutEnabled = true;
 
     const Responses = getComponent("responses")
@@ -121,8 +121,8 @@ export default class Operation extends PureComponent {
               { (operation && operation.size) || operation === null ? null :
                 <img height={"32px"} width={"32px"} src={require("core/../img/rolling-load.svg")} className="opblock-loading-animation" />
               }
-              { !uniqueRoute && deprecated && <h4 className="opblock-title_normal"> Warning: Deprecated</h4>}
-              { !uniqueRoute && description &&
+              { !isSpecificRoute && deprecated && <h4 className="opblock-title_normal"> Warning: Deprecated</h4>}
+              { !isSpecificRoute && description &&
                 <div className="opblock-description-wrapper">
                   <div className="opblock-description">
                     <Markdown source={ description } />
@@ -130,7 +130,7 @@ export default class Operation extends PureComponent {
                 </div>
               }
               {
-                !uniqueRoute && externalDocs && externalDocs.url ?
+                !isSpecificRoute && externalDocs && externalDocs.url ?
                 <div className="opblock-external-docs-wrapper">
                   <h4 className="opblock-title_normal">Find more details</h4>
                   <div className="opblock-external-docs">
