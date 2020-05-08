@@ -90,6 +90,7 @@ import * as LayoutUtils from "core/components/layout-utils"
 import * as JsonSchemaComponents from "core/json-schema-components"
 
 import CategoryFilter from "core/components/category-filter"
+import PJSTreeItem from "core/components/pjsTreeItem"
  
 
 export default function() {
@@ -164,7 +165,8 @@ export default function() {
       Example,
       ExamplesSelect,
       ExamplesSelectValueRetainer,
-      CategoryFilter
+      CategoryFilter,
+      PJSTreeItem
     }
   }
 

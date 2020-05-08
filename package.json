@@ -5,8 +5,9 @@
   "contributors": [],
   "license": "Apache-2.0",
   "scripts": {
-    "npmpublish": "bash ./swagger-ui-dist-package/deploy.sh",
-    "postbuild": "run-p npmpublish start",
+    "publish": "bash ./swagger-ui-dist-package/deploy.sh --publish",
+    "pack": "bash ./swagger-ui-dist-package/deploy.sh",
+    "postbuild": "npm start",
     "automated-release": "release-it --config ./release/.release-it.json",
     "build": "run-p --aggregate-output build-core build-bundle build-standalone build-stylesheets",
     "build-bundle": "webpack --colors --config webpack/bundle.babel.js",

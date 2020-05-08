@@ -1,6 +1,6 @@
 # Profound.js Swagger UI
 
-This module, `profound.js-swagger-ui`, extends swagger-ui-dist package as a dependency-free npm module.
+This module, `profoundjs-swagger-ui`, extends swagger-ui-dist package as a dependency-free npm module.
 This package is designed to only be used internally by the Profound.js Server Framework.
 
 To get an absolute path to this directory for static file serving, use the exported `getAbsoluteFSPath` method:

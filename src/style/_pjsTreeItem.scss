@@ -1,0 +1,56 @@
+.pjs-root-item, 
+.pjs-child-item
+{
+    display: flex;
+    list-style: none;
+    white-space: nowrap;
+    outline: 0;
+    font-size: 12pt;
+    padding: 0px 15px;
+    border-bottom: 0.1px solid #656c72;
+}
+
+.pjs-root-item.selected, 
+.pjs-child-item.selected
+{
+    background-color: #484e5e;
+}
+
+
+.pjs-root-item img, 
+.pjs-child-item img
+{
+    width: 18px;
+    filter: invert(180%);
+    cursor: pointer;
+}
+
+.pjs-treeitem-text
+{
+    width: 100%;
+    cursor: pointer;
+    padding: 15px;
+}
+
+.pjs-child-item .pjs-treeitem-text.no-children
+{
+    padding-left: 20px;
+}
+
+.pjs-treeitem-text.has-children
+{
+    padding-left: 5px;
+}
+
+
+.pjs-root-item .pjs-treeitem-text.no-children
+{
+    padding-left: 5px;
+}
+
+
+.pjs-root-item img.category-refresh-img
+{
+    width: 24px;
+    margin-right: -10px;
+}

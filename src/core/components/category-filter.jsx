@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from "prop-types"
 
-import Tree, { TreeNode } from 'rc-tree';
 import SearchImg from "../../img/search.svg";
-import RefreshImg from "../../img/refresh.svg";
 
 export default class CategoryFilter extends React.Component {
+    // selectedCategoryInstance = null;
+    searchText = "";
+    // searchCategoryUrl = "";
+    treeItemInstances = [];
+
     static propTypes = {
         errSelectors: PropTypes.object.isRequired,
         errActions: PropTypes.object.isRequired,
@@ -17,9 +20,7 @@ export default class CategoryFilter extends React.Component {
     }
 
     state = {
-        searchText: "",
-        selectedCategoryUrl: "",
-        treeData: [{ key: "0-0", title: "Loading...", urlSearch: "", isLeaf: true, className: "all-categories" }]
+        treeData: []
     };
 
     componentDidMount() {
@@ -28,12 +29,12 @@ export default class CategoryFilter extends React.Component {
 
     refreshCategories = (event) => {
         let { specSelectors } = this.props;
+        this.setState({ treeData: [] });
+        this.treeItemInstances = [];
 
-        this.setState({ selectedKeys: [], selectedCategoryUrl: "" });
         let url = specSelectors.url();
-        console.log(url);
         let parts = url.split("?");
-        url = parts.shift().replace(/openapi\.json/i, "api-categories") + "?includeempty=false";
+        url = parts.shift().replace(/openapi\.json/i, "api-categories");
 
         let processResults = function (data) {
             if (typeof data != "object") {
@@ -41,71 +42,63 @@ export default class CategoryFilter extends React.Component {
                 return;
             }
 
-            const categories = [this.state.treeData[0]];
+            const categories = [];
+            let allOthers = null;
 
             let loop = (data, parent) => {
                 for (let i = 0; i < data.length; i++) {
-                    let item = {}
-                    item.title = data[i].name;
+                    // Skip null items or unnamed subcategories
+                    if (!data[i] || (parent && !data[i].name)) continue;
 
-                    if (parent)
-                        item.key = `${parent.key}-${i}`;
-                    else
-                        item.key = `0-${i + 1}`;
+                    let item = { name: data[i].name };
 
                     if (parent) {
-                        item.urlSearch = `?cat=${parent.title}&subcat=${item.title}`;
+                        item.urlSearch = `?cat=${parent.name}&subcat=${item.name}`;
+                        parent.children = parent.children || [];
                         parent.children.push(item);
                     } else {
-                        item.urlSearch = `?cat=${item.title}`;
-                        categories.push(item);
+                        item.urlSearch = `?cat=${item.name}`;
+                        if (item.name)
+                            categories.push(item);
+                        else
+                            allOthers = item;
                     }
 
-                    if (data[i].subCategories && data[i].subCategories.length) {
-                        item.children = [];
+                    if (data[i].subCategories && data[i].subCategories.length)
                         loop(data[i].subCategories, item);
-                    }
-                    else
-                        item.isLeaf = true;
                 }
             };
 
             loop(data);
+            categories.unshift({ name: "All Categories", urlSearch: "", allItems: true });
 
-            categories.push({ isLeaf: true, disabled: true, className: "category-separator" });
-            categories.push({ key: `0-${data.length + 1}`, title: "All Others", urlSearch: "?cat=&subcat=", isLeaf: true, className: "all-other-categories" });
+            if (allOthers) {
+                allOthers.name = "All Others";
+                categories.push(allOthers);
+            }
 
-            categories[0].title = "All Categories";
-            categories[0].className = "all-categories"
-            this.setState({ treeData: categories, selectedKeys: ["0-0"], expandedKeys: [] });
+            this.setState({ treeData: categories });
 
-            // If this was triggered from the Refresh button, then we need to all
+            // If this was triggered from the Refresh button, then we need to show it
             if (event) this.performSearch();
         }
 
         let me = this;
-        if (window.isdev)
-            processResults.call(me, [{"name":"Big Area B","subCategories":[{"name":"BBB"},{"name":"Scot"},{"name":"little a"},{"name":"little b"},{"name":"little c"}]},{"name":"Business Area 1","subCategories":[{"name":"Insurance"}]},{"name":"Business Area 4","subCategories":[{"name":"Warehouse"}]},{"name":"Product XYZ","subCategories":[{"name":"Appliction y"},{"name":"Appliction yyyy"}]},{"name":"Scot","subCategories":[{"name":"Bug"}]}]);
-        else {
+        if (window.isdev) {
+            setTimeout(() => {
+                processResults.call(me, [{ "name": "", "subCategories": [{ "name": "" }] }, { "name": "Big Area B", "subCategories": [{ "name": "BBB" }, { "name": "Scot" }, { "name": "little a" }, { "name": "little b" }, { "name": "little c" }] }, { "name": "Business Area 1", "subCategories": [{ "name": "Insurance" }] }, { "name": "Business Area 4", "subCategories": [{ "name": "Warehouse" }] }, { "name": "Product XYZ", "subCategories": [{ "name": "Appliction y" }, { "name": "Appliction yyyy" }] }, { "name": "Scot", "subCategories": [{ "name": "Bug" }] }]);
+            }, 3000);
+        } else {
             fetch(url).then(response => !response.ok ? response.statusText : response.json()).then(data => processResults.call(me, data));
         }
     }
 
-    onSelect = (selectedKeys, info) => {
-        let key = info.node.props.eventKey;
-        this.setState({ selectedKeys: [key], selectedCategoryUrl: info.node.props.urlSearch });
-
-        setTimeout(this.performSearch);
-    };
-
     onSearchTextChanged = (event) => {
-        console.log("onSearchTextChanged:", event);
         const { target: { value } } = event
-        this.setState({ searchText: value });
+        this.searchText = value;
     }
 
     handleKeyPress = (event) => {
-        console.log("handleKeyPress:", event);
         if (event.key === 'Enter')
             this.performSearch();
     }
@@ -115,10 +108,12 @@ export default class CategoryFilter extends React.Component {
         let url = specSelectors.url();
         let parts = url.split("?");
         url = parts.shift();
+        let urlSearch = "";
 
-        console.log("performSearch:", this.state.selectedCategoryUrl, this.state.searchText);
-        let urlSearch = this.state.selectedCategoryUrl;
-        let searchText = this.state.searchText.trim();
+        let current = this.treeItemInstances.find(i => i.isSelected());
+        if (current)
+            urlSearch = current.getData().urlSearch;
+        let searchText = this.searchText.trim();
 
         if (searchText) {
             //  bob "scot was here" noway
@@ -146,58 +141,60 @@ export default class CategoryFilter extends React.Component {
 
             if (urlKeyWords.length)
                 searchText = urlKeyWords.join("&");
+
+            urlSearch += (urlSearch ? "&" : "?") + searchText;
         }
 
-        urlSearch += (urlSearch ? "&" : "?") + searchText;
-
+        urlSearch = encodeURI(urlSearch);
         specActions.updateUrl(url + urlSearch);
         specActions.download();
     }
 
+    //onCategoryChanged = (event, data, newValue, instance) => {
+    onCategoryChanged = (event, instance) => {
+        let current = this.treeItemInstances.find(i => i.isSelected());
+
+        // UnSelect current if different then passed instance
+        if (current && current != instance)
+            current.setSelected(false);
+
+        // Select passed instance if different than current
+        if (instance && instance != current)
+            instance.setSelected(true);
+
+        // Always perform search...
+        setTimeout(() => {
+            this.performSearch();
+        });
+    }
+
     render() {
         let { getComponent } = this.props;
-        let Col = getComponent("Col")
+        let Col = getComponent("Col");
+        let PJSTreeItem = getComponent("PJSTreeItem", true);
+
+        let loading = !this.state.treeData.length;
+
         return (
             <Col className="pjs-api-search-column">
                 <div class="filter-box-heading">
-                    <h2 class="title">Filter</h2>
+                    <div class="title">Filter</div>
                 </div>
                 <div class="keywords-body">
-                    <input type="text" value={this.state.searchText} onKeyPress={this.handleKeyPress} placeholder='Keywords or "phrase"' onChange={this.onSearchTextChanged} />
+                    <input type="text" onKeyPress={this.handleKeyPress} placeholder='Keywords or "phrase"' onChange={this.onSearchTextChanged} />
                     <img src={SearchImg} alt="Search" onClick={this.performSearch} />
                 </div>
-                <div class="category-heading">
-                    <div class="title">Categories</div>
-                    <img src={RefreshImg} alt="Refresh" onClick={this.refreshCategories} />
-                </div>
-                <Tree
-                    className="category-tree"
-                    selectedKeys={this.state.selectedKeys}
-                    showIcon="false"
-                    onSelect={this.onSelect}
-                    treeData={this.state.treeData}
-                />
+                {loading ?
+                    <div className="loading-container">
+                        <div className="loading"></div>
+                    </div>
+                    :
+
+                    this.state.treeData.map((value, index) => {
+                        return <PJSTreeItem root="true" instances={this.treeItemInstances} data={value} onSelectionChanged={this.onCategoryChanged} refreshCategories={this.refreshCategories}></PJSTreeItem>
+                    })
+                }
             </Col>
-
-
-            // <div>
-            //     <div>
-            //         <input type="text" value={this.state.searchText} onKeyPress={this.handleKeyPress}></input>
-            //         <button onClick={this.doSearch}>Search</button>
-            //     </div>
-            //     <div style="border:1px black solid">
-            //         <div>
-            //             <div>Categories</div>
-            //             <button onClick={this.refreshCategories}>Refresh</button>
-            //         </div>
-            //         <Tree
-            //             selectedKeys={this.state.selectedKeys}
-            //             showIcon="false"
-            //             onSelect={this.onSelect}
-            //             treeData={this.state.treeData}
-            //         />
-            //     </div>
-            // </div>
         );
     }
 }

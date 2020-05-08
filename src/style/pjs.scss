@@ -22,26 +22,13 @@
 {
     width: 25%;
     min-width: 180px;
-    overflow: auto;
+    background-color: #313541;
+    color: white;
+    height: fit-content;
 }
 
-.pjs-treenode
-{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 5px 8px;
-    padding-left: 20px;
-    &:hover {
-        background: lightgray;
-    }
-}
 
-.pjs-treenode-icon
-{
-  font-size: 12px;
-  margin-right: 5px;
-}
+
 
 
 // PJS Overrides
