@@ -45,6 +45,7 @@ export default class StandaloneLayout extends React.Component {
     const hasServers = servers && servers.size
     const hasSchemes = schemes && schemes.size
     const hasSecurityDefinitions = !!specSelectors.securityDefinitions()
+    const isLoading = specSelectors.loadingStatus() === "loading";
     let isSpecificRoute = window.isSpecificRoute;
 
     return (
@@ -55,7 +56,7 @@ export default class StandaloneLayout extends React.Component {
 
         <div className='swagger-ui'>
           <SvgAssets />
-          <VersionPragmaFilter isSwagger2={isSwagger2} isOAS3={isOAS3} alsoShow={<Errors />}>
+          <VersionPragmaFilter bypass={isLoading} isSwagger2={isSwagger2} isOAS3={isOAS3} alsoShow={<Errors />}>
             <Errors />
             {isSpecificRoute ? null :
               <Row className="information-container">
@@ -75,11 +76,10 @@ export default class StandaloneLayout extends React.Component {
               </div>
             ) : null}
 
-            <Row className="pjs-filter-container">
+            <Row className="pjs-main-container">
               {isSpecificRoute ? null : <CategoryFilter /> }
 
               <BaseLayout />
-
 
             </Row>
           </VersionPragmaFilter>

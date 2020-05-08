@@ -4,9 +4,7 @@ import PropTypes from "prop-types"
 import SearchImg from "../../img/search.svg";
 
 export default class CategoryFilter extends React.Component {
-    // selectedCategoryInstance = null;
     searchText = "";
-    // searchCategoryUrl = "";
     treeItemInstances = [];
 
     static propTypes = {
@@ -37,10 +35,7 @@ export default class CategoryFilter extends React.Component {
         url = parts.shift().replace(/openapi\.json/i, "api-categories");
 
         let processResults = function (data) {
-            if (typeof data != "object") {
-                alert(data);
-                return;
-            }
+            if (!Array.isArray(data)) data = [];
 
             const categories = [];
             let allOthers = null;
@@ -89,7 +84,15 @@ export default class CategoryFilter extends React.Component {
                 processResults.call(me, [{ "name": "", "subCategories": [{ "name": "" }] }, { "name": "Big Area B", "subCategories": [{ "name": "BBB" }, { "name": "Scot" }, { "name": "little a" }, { "name": "little b" }, { "name": "little c" }] }, { "name": "Business Area 1", "subCategories": [{ "name": "Insurance" }] }, { "name": "Business Area 4", "subCategories": [{ "name": "Warehouse" }] }, { "name": "Product XYZ", "subCategories": [{ "name": "Appliction y" }, { "name": "Appliction yyyy" }] }, { "name": "Scot", "subCategories": [{ "name": "Bug" }] }]);
             }, 3000);
         } else {
-            fetch(url).then(response => !response.ok ? response.statusText : response.json()).then(data => processResults.call(me, data));
+            fetch(url).then(response => {
+                let data = null;
+                if (!response.ok) {
+                    let msg = `An error occured while retrieving the Categories.\nHTTP error ${response.status}: ${response.statusText}.`
+                    alert(msg);
+                } else
+                    data = response.json();
+                return data;
+            }).then(data => processResults.call(me, data));
         }
     }
 
@@ -152,26 +155,23 @@ export default class CategoryFilter extends React.Component {
 
     //onCategoryChanged = (event, data, newValue, instance) => {
     onCategoryChanged = (event, instance) => {
-        let current = this.treeItemInstances.find(i => i.isSelected());
 
-        // UnSelect current if different then passed instance
-        if (current && current != instance)
-            current.setSelected(false);
-
-        // Select passed instance if different than current
-        if (instance && instance != current)
-            instance.setSelected(true);
+        // Select Selection state of all TreeInstances based on passed instance
+        for(let i=0;i<this.treeItemInstances.length;i++){
+            try {
+                let ti = this.treeItemInstances[i];
+                ti.setSelected( ti === instance);
+            } catch(error){}
+        }
 
         // Always perform search...
-        setTimeout(() => {
-            this.performSearch();
-        });
+        setTimeout(() => this.performSearch());
     }
 
     render() {
         let { getComponent } = this.props;
         let Col = getComponent("Col");
-        let PJSTreeItem = getComponent("PJSTreeItem", true);
+        let CategoryTreeItem = getComponent("CategoryTreeItem", true);
 
         let loading = !this.state.treeData.length;
 
@@ -191,7 +191,7 @@ export default class CategoryFilter extends React.Component {
                     :
 
                     this.state.treeData.map((value, index) => {
-                        return <PJSTreeItem root="true" instances={this.treeItemInstances} data={value} onSelectionChanged={this.onCategoryChanged} refreshCategories={this.refreshCategories}></PJSTreeItem>
+                        return <CategoryTreeItem root="true" instances={this.treeItemInstances} data={value} onSelectionChanged={this.onCategoryChanged} refreshCategories={this.refreshCategories}></CategoryTreeItem>
                     })
                 }
             </Col>

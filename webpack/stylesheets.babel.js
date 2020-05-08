@@ -27,12 +27,12 @@ export default {
           },
           {
             loader: "css-loader",
-            options: { sourceMap: true },
+            options: { sourceMap: false },
           },
           {
             loader: "postcss-loader",
             options: {
-              sourceMap: true,
+              sourceMap: false,
               plugins: loader => [
                 require("cssnano")(),
                 require("autoprefixer")(),
@@ -43,8 +43,8 @@ export default {
             loader: "sass-loader",
             options: {
               outputStyle: "expanded",
-              sourceMap: true,
-              sourceMapContents: "true",
+              sourceMap: false,
+              sourceMapContents: "false",
             },
           },
         ],
@@ -63,7 +63,7 @@ export default {
     }),
   ],
 
-  devtool: "source-map",
+  // devtool: "source-map",
 
   output: {
     path: path.join(__dirname, "../", "dist"),
