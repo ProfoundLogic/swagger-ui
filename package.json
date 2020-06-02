@@ -1,6 +1,6 @@
 {
   "name": "profoundjs-swagger-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/swagger-ui.js",
   "contributors": [],
   "license": "Apache-2.0",
@@ -76,7 +76,7 @@
     "reselect": "^4.0.0",
     "serialize-error": "^6.0.0",
     "sha.js": "^2.4.11",
-    "swagger-client": "^3.10.1",
+    "swagger-client": "^3.10.3",
     "url-parse": "^1.4.7",
     "xml-but-prettier": "^1.0.1",
     "zenscroll": "^4.0.2"
