@@ -1,6 +1,6 @@
 {
   "name": "profoundjs-swagger-ui",
-  "version": "1.0.1",
+  "version": "$$VERSION",
   "main": "index.js",
   "contributors": [],
   "license": "Apache-2.0",
