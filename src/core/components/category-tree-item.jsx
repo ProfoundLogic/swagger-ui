@@ -48,16 +48,16 @@ export default class CategoryTreeItem extends React.Component {
             textClass += " no-children";
 
         return (
-            <div class={rowClass}>
-                <div class={itemClass}>
+            <div className={rowClass}>
+                <div className={itemClass}>
                     {!data.children ? null : <img src={expaneded ? ExpandedImg : CollapsedImg} alt={expaneded ? "Collapse" : "Expand"} onClick={this.onExpanded} />}
-                    <div class={textClass} onClick={event => onSelectionChanged(event, this)}>{data.name}</div>
-                    {!data.allItems ? null : <img class="category-refresh-img" src={RefreshImg} alt="Refresh" onClick={refreshCategories} />}
+                    <div className={textClass} onClick={event => onSelectionChanged(event, this)}>{data.name}</div>
+                    {!data.allItems ? null : <img className="category-refresh-img" src={RefreshImg} alt="Refresh" onClick={refreshCategories} />}
                 </div>
 
                 {!data.children ? null :
                     data.children.map((value, index) => {
-                        return <CategoryTreeItem parentExpanded={expaneded} instances={instances} data={value} onSelectionChanged={onSelectionChanged}></CategoryTreeItem>
+                        return <CategoryTreeItem key={index} parentExpanded={expaneded} instances={instances} data={value} onSelectionChanged={onSelectionChanged}></CategoryTreeItem>
                     })
                 }
             </div>

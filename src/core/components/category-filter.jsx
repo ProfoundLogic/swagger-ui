@@ -177,10 +177,10 @@ export default class CategoryFilter extends React.Component {
 
         return (
             <Col className="pjs-api-search-column">
-                <div class="filter-box-heading">
-                    <div class="title">Filter</div>
+                <div className="filter-box-heading">
+                    <div className="title">Filter</div>
                 </div>
-                <div class="keywords-body">
+                <div className="keywords-body">
                     <input type="text" onKeyPress={this.handleKeyPress} placeholder='Keywords or "phrase"' onChange={this.onSearchTextChanged} />
                     <img src={SearchImg} alt="Search" onClick={this.performSearch} />
                 </div>
@@ -191,7 +191,7 @@ export default class CategoryFilter extends React.Component {
                     :
 
                     this.state.treeData.map((value, index) => {
-                        return <CategoryTreeItem root="true" instances={this.treeItemInstances} data={value} onSelectionChanged={this.onCategoryChanged} refreshCategories={this.refreshCategories}></CategoryTreeItem>
+                        return <CategoryTreeItem key={index} root="true" instances={this.treeItemInstances} data={value} onSelectionChanged={this.onCategoryChanged} refreshCategories={this.refreshCategories}></CategoryTreeItem>
                     })
                 }
             </Col>
