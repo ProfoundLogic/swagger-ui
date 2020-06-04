@@ -1,12 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
-// import Tree from '../tree';
 
 export default class BaseLayout extends React.Component {
-  // onCategoryChanged = (event) => {
-  //   console.log(event);
-  //   window.selectedCategory = event.target.textContent;
-  // };
 
   static propTypes = {
     errSelectors: PropTypes.object.isRequired,
@@ -90,25 +85,23 @@ export default class BaseLayout extends React.Component {
     // const hasSchemes = schemes && schemes.size
     // const hasSecurityDefinitions = !!specSelectors.securityDefinitions()
 
-    // let priorSelected = window.selectedCategory;
-
     return (
-      
 
-            <Col className={isSpecificRoute ? "pjs-api-column-full" : "pjs-api-column-partial"}>
-              <FilterContainer />
 
-              <Row>
-                <Col mobile={12} desktop={12} >
-                  <Operations />
-                </Col>
-              </Row>
-              <Row>
-                <Col mobile={12} desktop={12} >
-                  <Models />
-                </Col>
-              </Row>
-            </Col>
+      <Col className={isSpecificRoute ? "pjs-api-column-full" : "pjs-api-column-partial"}>
+        <FilterContainer />
+
+        <Row>
+          <Col mobile={12} desktop={12} >
+            <Operations />
+          </Col>
+        </Row>
+        <Row>
+          <Col mobile={12} desktop={12} >
+            <Models />
+          </Col>
+        </Row>
+      </Col>
     )
   }
 }

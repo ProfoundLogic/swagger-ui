@@ -126,6 +126,7 @@ export default class Info extends React.Component {
           </h2>
           { host || basePath ? <InfoBasePath host={ host } basePath={ basePath } /> : null }
           { url && <InfoUrl getComponent={getComponent} url={url} /> }
+          <hr/>
         </hgroup>
 
         <div className="description">
@@ -143,6 +144,8 @@ export default class Info extends React.Component {
         { externalDocsUrl ?
             <Link className="info__extdocs" target="_blank" href={sanitizeUrl(externalDocsUrl)}>{externalDocsDescription || externalDocsUrl}</Link>
         : null }
+
+        {description || termsOfService || (contact && contact.size) || (license && license.size) || externalDocsUrl ? <hr/> : null }
 
       </div>
     )
