@@ -495,6 +495,11 @@ export const validateBeforeExecute = ( state, pathMethod ) => {
   return isValid
 }
 
+export const pjsSpecificFileRouteError = createSelector(
+  spec,
+  spec => spec.get("x-error")
+)
+
 function returnSelfOrNewMap(obj) {
   // returns obj if obj is an Immutable map, else returns a new Map
   return Map.isMap(obj) ? obj : new Map()

@@ -52,11 +52,11 @@
     // window.isdev = true;
 
     // Debugging this project with live data
-    // url = "http://localhost:8081/api/openapi.json";
+    url = "http://localhost:8081/api/openapi.json";
 
     url += document.location.search;
 
-    window.isSpecificRoute = url.match(/(\?|&)route\=/i) != null;
+    window.isSpecificRoute = url.match(/(\?|&)modfile\=/i) != null;
     if (window.isSpecificRoute)
       document.body.style.margin = "0px"
 
@@ -78,11 +78,14 @@
       // End Swagger UI call region
 
       window.ui = ui;
+      window.parent.swaggerStatsRetryMax = 10;
+      window.parent.swaggerStatsRetryDelay = 500;
 
       if (window.parent) {
-        window.parent.showApiRoute = function (routeKey) {
+        window.parent.showSwaggerUIRoute = function (routeInfo) {
+          window.parent.swaggerStatsRetryMax = 10;
           url = ui.specSelectors.url().split("?")[0];
-          url = `${url}?route=${routeKey}`;
+          url += encodeURI("?method=" + routeInfo["method"] + "&path" + routeInfo["path"] + "&modfile=" + routeInfo["modfile"]);
           ui.specActions.updateUrl(url);
           ui.specActions.download();
         }

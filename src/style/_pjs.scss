@@ -28,11 +28,19 @@
 }
 
 
+.pjs-spec-error-panel
+{
+    display:flex;
+    padding:5px
+}
 
-
+.pjs-spec-error-panel .pjs-panel-icon
+{
+    padding:0px 5px
+}
 
 // ****************************************** PJS Overrides ******************************************
-.swagger-ui .info
+.swagger-ui .info:not(.loading-container)
 {
     margin: 0px;
     padding: 10px 10px 5px 10px;

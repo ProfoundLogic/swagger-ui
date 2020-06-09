@@ -1,7 +1,12 @@
 import React from "react"
 import PropTypes from "prop-types"
+import ErrorImg from "../../../img/error.png";
 
 export default class BaseLayout extends React.Component {
+  constructor(){
+    super();
+    this.retryTimer = null;
+  }
 
   static propTypes = {
     errSelectors: PropTypes.object.isRequired,
@@ -14,6 +19,7 @@ export default class BaseLayout extends React.Component {
 
   render() {
     let { errSelectors, specSelectors, getComponent } = this.props
+    const isSpecificRoute = window.isSpecificRoute;
 
     // let SvgAssets = getComponent("SvgAssets")
     // let InfoContainer = getComponent("InfoContainer", true)
@@ -34,15 +40,56 @@ export default class BaseLayout extends React.Component {
     const isSpecEmpty = !specSelectors.specStr()
 
     const loadingStatus = specSelectors.loadingStatus()
-    const isSpecificRoute = window.isSpecificRoute;
+
+    if (isSpecificRoute && loadingStatus === "success") {
+      let fileRouteError = specSelectors.pjsSpecificFileRouteError();
+      if (fileRouteError) {
+        let code = fileRouteError.get("code");
+        let title = fileRouteError.get("title");
+
+        // Watch out... React/Swagger Client runs this render function several times
+        if (code == 100) {
+          if (this.retryTimer == null) {
+            window.parent.swaggerStatsRetryMax--;
+            if (window.parent.swaggerStatsRetryMax > 0) {
+              this.retryTimer = setTimeout(() => {
+                if (this.retryTimer != null) {
+                  clearTimeout(this.retryTimer);
+                  this.retryTimer = null;
+                  ui.specActions.download();
+                }
+              }, window.parent.swaggerStatsRetryDelay);
+            }
+          }
+        } else if (title) {
+          let message = fileRouteError.get("message");
+          let modFile = fileRouteError.get("modFile");
+          return (
+            <div className="swagger-ui pjs-api-column-full">
+              <div className="wrapper pjs-spec-error-panel">
+              <img height="48" className="pjs-panel-icon" src={ErrorImg} alt="Error" />
+              <div>
+                <div><b>{title}</b></div>
+                { code == 101 && modFile && !message ? <div><br></br>It is served from: <b>{modFile}</b></div> : <div><br></br>{message}</div> }
+              </div>
+            </div>
+            </div>
+          );
+        }
+      }
+    }
 
     let loadingMessage = null
 
-    if (loadingStatus === "loading") {
-      loadingMessage = <div className="info">
-        <div className="loading-container">
-          <div className="loading"></div>
-        </div>
+    if (loadingStatus === "loading" || this.retryTimer) {
+      // loadingMessage = <div className="info">
+      //   <div className="loading-container">
+      //     <div className="loading"></div>
+      //   </div>
+      // </div>
+
+      loadingMessage = <div className="info loading-container">
+        <div className="loading"></div>
       </div>
     }
 
