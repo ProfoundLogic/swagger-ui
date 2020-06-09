@@ -19,6 +19,6 @@ else
   npm pack .
 fi
 
-git checkout 'swagger-ui-dist-package/package.json'
-
 find . -not -name .npmignore -not -name .npmrc -not -name deploy.sh -not -name index.js -not -name package.json -not -name README.md -not -name absolute-path.js -not -name *.tgz -delete
+
+git checkout '../swagger-ui-dist-package/package.json'
