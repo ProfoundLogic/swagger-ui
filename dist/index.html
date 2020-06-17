@@ -85,7 +85,7 @@
         window.parent.showSwaggerUIRoute = function (routeInfo) {
           window.parent.swaggerStatsRetryMax = 10;
           url = ui.specSelectors.url().split("?")[0];
-          url += encodeURI("?method=" + routeInfo["method"] + "&path" + routeInfo["path"] + "&modfile=" + routeInfo["modfile"]);
+          url += "?method=" + encodeURI(routeInfo["method"]) + "&path=" + encodeURI(routeInfo["path"]) + "&modfile=" + encodeURI(routeInfo["modfile"]);
           ui.specActions.updateUrl(url);
           ui.specActions.download();
         }
