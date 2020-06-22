@@ -198,6 +198,7 @@ export default class Parameters extends Component {
                 specPath={specPath.slice(0, -1).push("requestBody")}
                 requestBody={requestBody}
                 requestBodyValue={oas3Selectors.requestBodyValue(...pathMethod)}
+                requestBodyInclusionSetting={oas3Selectors.requestBodyInclusionSetting(...pathMethod)}
                 isExecute={isExecute}
                 activeExamplesKey={oas3Selectors.activeExamplesMember(
                   ...pathMethod,
@@ -223,6 +224,13 @@ export default class Parameters extends Component {
                     })
                   }
                   oas3Actions.setRequestBodyValue({ value, pathMethod })
+                }}
+                onChangeIncludeEmpty={(name, value) => {
+                  oas3Actions.setRequestBodyInclusion({
+                    pathMethod,
+                    value,
+                    name,
+                  })
                 }}
                 contentType={oas3Selectors.requestContentType(...pathMethod)}/>
             </div>

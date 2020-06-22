@@ -36,34 +36,21 @@
   <script>
     var url = document.location.href.replace(document.location.hash, "").replace(document.location.search, "");
 
-    var paths = url.split("/");
-    var lastPath = "";
-    for(var pCnt=paths.length;pCnt>0;pCnt--) {
-      lastPath = paths[pCnt-1];
-      if (lastPath) break;
-    }
+    // Debugging this project with PJS live data
+    // url = "http://localhost:8081/wsapi/";
 
-    if (!lastPath.match(/api/i))
-      url += "api/";
-    
-    url += "openapi.json";
-    
     // Debugging this project with dummy data
+    // url += "wsapi/";
     // window.isdev = true;
 
-    // Debugging this project with live data
-    //url = "http://localhost:8081/api/openapi.json";
-
-    url += document.location.search;
-
-    window.isSpecificRoute = url.match(/(\?|&)modfile\=/i) != null;
+    window.isSpecificRoute = document.location.search.match(/(\?|&)modfile\=/i) != null;
     if (window.isSpecificRoute)
       document.body.style.margin = "0px"
 
     window.onload = function () {
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
-        url: url,
+        url: url + "openapi.json" + document.location.search,
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [

@@ -42,7 +42,7 @@
       window["SwaggerUIStandalonePreset"] = window["swagger-ui-standalone-preset"]
       // Build a system
       const ui = SwaggerUIBundle({
-        url: "http://localhost:8081/api/openapi.json" + document.location.search,
+        url: "http://localhost:8081/wsapi/openapi.json" + document.location.search,
         dom_id: '#swagger-ui',
         presets: [
           SwaggerUIBundle.presets.apis,
@@ -62,6 +62,7 @@
         realm: "your-realms",
         appName: "your-app-name",
         scopeSeparator: " ",
+        scopes: "openid profile email phone address",
         additionalQueryStringParams: {},
         usePkceWithAuthorizationCodeGrant: false
       })
