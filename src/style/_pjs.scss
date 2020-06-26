@@ -70,7 +70,7 @@ textarea.body-param__text
     resize: none;
 }
 
-.opblock-tag-section {
+.opblock-tag-section[specificroute=false] {
     margin-bottom: 20px;
 }
 

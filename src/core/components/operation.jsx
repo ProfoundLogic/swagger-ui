@@ -118,9 +118,7 @@ export default class Operation extends PureComponent {
         <OperationSummary operationProps={operationProps} toggleShown={toggleShown} getComponent={getComponent} authActions={authActions} authSelectors={authSelectors} specPath={specPath} />
           <Collapse isOpened={isShown}>
             <div className="opblock-body">
-              { (operation && operation.size) || operation === null ? null :
-                <img height={"32px"} width={"32px"} src={require("core/../img/rolling-load.svg")} className="opblock-loading-animation" />
-              }
+              { (operation && operation.size) || operation === null ? null : <div className="loading-container"><div className="loading"></div></div> }
               { !isSpecificRoute && deprecated && <h4 className="opblock-title_normal"> Warning: Deprecated</h4>}
               { !isSpecificRoute && description &&
                 <div className="opblock-description-wrapper">

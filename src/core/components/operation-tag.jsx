@@ -58,7 +58,7 @@ export default class OperationTag extends React.Component {
     if (isSpecificRoute) showTag = true;
 
     return (
-      <div className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} >
+      <div specificroute="true" className={showTag ? "opblock-tag-section is-open" : "opblock-tag-section"} >
 
         {isSpecificRoute ? null :
           <h4

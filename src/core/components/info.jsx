@@ -118,8 +118,6 @@ export default class Info extends React.Component {
     const InfoUrl = getComponent("InfoUrl")
     const InfoBasePath = getComponent("InfoBasePath")
 
-    console.log(contact);
-
     return (
       <div className="info">
         <hgroup className="main">

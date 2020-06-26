@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import Im, { Map, List } from "immutable"
 import ImPropTypes from "react-immutable-proptypes"
+import RefreshImg from "../../../img/refresh.svg";
 
 // More readable, just iterate over maps, only
 const eachMap = (iterable, fn) => iterable.valueSeq().filter(Im.Map.isMap).map(fn)
@@ -131,12 +132,16 @@ export default class Parameters extends Component {
             <h4 className="opblock-title">Parameters</h4>
           </div>
           )}
-            { !isSpecificRoute && allowTryItOut ? (
+            { !isSpecificRoute ? null : <img className="operation-refresh-img" src={RefreshImg} alt="Refresh" onClick={ () => specActions.download() } /> }
+            { isSpecificRoute || !allowTryItOut ? null :
               <TryItOutButton enabled={ tryItOutEnabled } onCancelClick={ onCancelClick } onTryoutClick={ onTryoutClick } />
-            ) : null }
+            }
         </div>
-        {this.state.parametersVisible ? <div className="parameters-container">
-        { !parameters.count() ? <div className="opblock-description-wrapper"><p>No parameters</p></div> :
+
+        { !parameters.count() && !requestBody && <div className="parameters-container"><div className="opblock-description-wrapper"><p>No parameters</p></div></div> }
+        { !parameters.count() && requestBody && <div className="opblock-description-wrapper"></div> }
+
+        {this.state.parametersVisible && parameters.count() ? <div className="parameters-container">
           <div className="table-container">
             <table className="parameters">
               <thead>
@@ -169,7 +174,6 @@ export default class Parameters extends Component {
               </tbody>
             </table>
           </div>
-        }
         </div> : null }
 
         {this.state.callbackVisible ? <div className="callbacks-container opblock-description-wrapper">

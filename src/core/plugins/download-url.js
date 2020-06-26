@@ -8,12 +8,21 @@ export default function downloadUrlPlugin (toolbox) {
   let { fn } = toolbox
 
   const actions = {
-    download: (url)=> ({ errActions, specSelectors, specActions, getConfigs }) => {
+    download: (url)=> ({ errActions, specSelectors, specActions, getConfigs, oas3Actions, oas3Selectors }) => {
       let { fetch } = fn
       const config = getConfigs()
       url = url || specSelectors.url()
       specActions.updateLoadingStatus("loading")
       errActions.clear({source: "fetch"})    
+
+      // Clear setRequestBodyValue from all current operations.
+      let ops = specSelectors.operations().map(op => { return [op.get("path"), op.get("method")] }).toArray();
+      for(let oCnt=0;oCnt<ops.length;oCnt++) {
+        let op = ops[oCnt];
+        if (oas3Selectors.requestBodyValue(...op) != null)
+          oas3Actions.setRequestBodyValue({ pathMethod:op, value: null });
+      }
+
       fetch({
         url,
         loadSpec: true,

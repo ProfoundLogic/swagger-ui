@@ -50,15 +50,15 @@ export default class BaseLayout extends React.Component {
         // Watch out... React/Swagger Client runs this render function several times
         if (code == 100) {
           if (this.retryTimer == null) {
-            window.parent.swaggerStatsRetryMax--;
-            if (window.parent.swaggerStatsRetryMax > 0) {
+            window.parent.swaggerTestRetryMax--;
+            if (window.parent.swaggerTestRetryMax > 0) {
               this.retryTimer = setTimeout(() => {
                 if (this.retryTimer != null) {
                   clearTimeout(this.retryTimer);
                   this.retryTimer = null;
                   ui.specActions.download();
                 }
-              }, window.parent.swaggerStatsRetryDelay);
+              }, window.parent.swaggerTestRetryDelay);
             }
           }
         } else if (title) {

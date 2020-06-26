@@ -86,15 +86,7 @@ export default function SwaggerUI(opts) {
   const domNode = opts.domNode
   delete opts.domNode
 
-  const constructorConfig = deepExtend({}, defaults, opts, queryConfig);
-
-  constructorConfig.responseInterceptor = function(e) {
-    if (e.ok === false) {
-      e.ok = true;
-      e.text = e.text.replace(/\<br \/\>/g,"\n");
-    }
-    return e;
-}
+  const constructorConfig = deepExtend({}, defaults, opts, queryConfig)
 
   const storeConfigs = {
     system: {
