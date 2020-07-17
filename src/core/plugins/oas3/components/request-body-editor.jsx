@@ -30,16 +30,15 @@ export default class RequestBodyEditor extends PureComponent {
     props.onChange(props.value)
   }
 
-  // Why apply an original default value ??? ever...
-  // applyDefaultValue = (nextProps) => {
-  //   const { onChange, defaultValue } = (nextProps ? nextProps : this.props)
+  applyDefaultValue = (nextProps) => {
+    const { onChange, defaultValue } = (nextProps ? nextProps : this.props)
 
-  //   this.setState({
-  //     value: defaultValue
-  //   })
+    this.setState({
+      value: defaultValue
+    })
 
-  //   return onChange(defaultValue)
-  // }
+    return onChange(defaultValue)
+  }
 
   onChange = (value) => {
     this.props.onChange(stringify(value))
@@ -65,12 +64,11 @@ export default class RequestBodyEditor extends PureComponent {
     }
 
     
-    // Why apply an original default value ??? ever...
-    // if(!nextProps.value && nextProps.defaultValue && !!this.state.value) {
-    //   // if new value is falsy, we have a default, AND the falsy value didn't
-    //   // come from us originally
-    //   this.applyDefaultValue(nextProps)
-    // }
+    if(!nextProps.value && nextProps.defaultValue && !!this.state.value) {
+      // if new value is falsy, we have a default, AND the falsy value didn't
+      // come from us originally
+      this.applyDefaultValue(nextProps)
+    }
   }
 
   render() {

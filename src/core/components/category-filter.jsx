@@ -67,7 +67,7 @@ export default class CategoryFilter extends React.Component {
             loop(data);
             categories.unshift({ name: "All Categories", urlSearch: "", allItems: true });
 
-            if (allOthers) {
+            if (allOthers && data.length > 1) {
                 allOthers.name = "All Others";
                 categories.push(allOthers);
             }
