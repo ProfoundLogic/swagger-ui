@@ -51,6 +51,7 @@
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
         url: url + "openapi.json" + document.location.search,
+        validatorUrl: "none",
         responseInterceptor: function (res) {
           if (this.props && typeof this.props.responseInterceptor === "function")
             res = this.props.responseInterceptor(res);
@@ -76,7 +77,7 @@
 
       window.ui = ui;
       window.parent.swaggerTestRetryMax = 10;
-      window.parent.swaggerTestRetryDelay = 500;
+      window.parent.swaggerTestRetryDelay = 400;
 
       if (window.parent) {
         window.parent.showSwaggerUIRoute = function (routeInfo, delayLoadTime) {
