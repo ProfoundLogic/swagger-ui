@@ -87,7 +87,8 @@
             if (container) {
               container.classList.add("loading-container");
               do
-                container.lastChild.remove();
+                if (container.lastChild && container.lastChild.remove)
+                  container.lastChild.remove();
               while (container.lastChild != container.firstChild);
               if (container.firstChild)
                 container.firstChild.className = "loading";
