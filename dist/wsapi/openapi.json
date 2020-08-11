@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "This is my our API Store.\n***\nCheck back often.\n***\nAPI's can change without notice",
+        "title": "This is my our API Store.",
         "version": "2.0.1",
         "contact": {
             "name": "Profound.js Dev team",
@@ -588,5 +588,26 @@
                 "description": "Get a list of Things"
             }
         }
-    }
+    },
+    "components": {
+      "securitySchemes": {
+        "BasicAuth": {
+          "type": "http",
+          "scheme": "basic"
+        },
+        "ApiKeyAuth": {
+          "type": "apikey",
+          "in": "header",
+          "name": "X-API-Key"
+        }
+      }
+    },
+    "security": [
+      {
+        "BasicAuth": []
+      },
+      {
+        "ApiKeyAuth": []
+      }
+    ]
 }
