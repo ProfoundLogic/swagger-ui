@@ -596,7 +596,7 @@
           "scheme": "basic"
         },
         "ApiKeyAuth": {
-          "type": "apikey",
+          "type": "apiKey",
           "in": "header",
           "name": "X-API-Key"
         }
