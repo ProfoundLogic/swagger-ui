@@ -37,7 +37,7 @@
     var url = document.location.href.replace(document.location.hash, "").replace(document.location.search, "");
 
     // Debugging this project with PJS live data
-    // url = "http://localhost:8081/wsapi/";
+    url = "http://localhost:8081/wsapi/";
 
     // Debugging this project with dummy data
     // url += "wsapi/";
@@ -52,16 +52,7 @@
       const ui = SwaggerUIBundle({
         url: url + "openapi.json" + document.location.search,
         validatorUrl: "none",
-        responseInterceptor: function (res) {
-          if (this.props && typeof this.props.responseInterceptor === "function")
-            res = this.props.responseInterceptor(res);
-
-          if (res.ok === false) {
-            res.ok = true;
-            res.text = res.text.replace(/\<br \/\>/g, "\n");
-          }
-          return res;
-        },
+        showMutatedRequest: true,
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
@@ -81,7 +72,7 @@
 
       if (window.parent) {
         window.parent.showSwaggerUIRoute = function (routeInfo, delayLoadTime) {
-          delayLoadTime = parseInt(delayLoadTime,10) || 0;
+          delayLoadTime = parseInt(delayLoadTime, 10) || 0;
           if (delayLoadTime) {
             var container = document.getElementsByClassName("pjs-api-column-full")[0];
             if (container) {

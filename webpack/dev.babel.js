@@ -18,10 +18,10 @@ const devConfig = configBuilder(
     mode: "development",
     entry: {
       "swagger-ui-bundle": [
-        "./src/core/index.js"
+        "./src/core/index.js",
       ],
       "swagger-ui-standalone-preset": [
-        "./src/standalone/index.js"
+        "./src/standalone/index.js",
       ],
       "swagger-ui": "./src/style/main.scss",
     },

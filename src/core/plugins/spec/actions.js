@@ -352,7 +352,6 @@ export const executeRequest = (req) =>
   ({fn, specActions, specSelectors, getConfigs, oas3Selectors}) => {
     let { pathName, method, operation } = req
     let { requestInterceptor, responseInterceptor } = getConfigs()
-
     
     let op = operation.toJS()
     
@@ -406,19 +405,31 @@ export const executeRequest = (req) =>
       if(isJSONObject(requestBody)) {
         req.requestBody = JSON.parse(requestBody)
       } else if(requestBody && requestBody.toJS) {
-        req.requestBody = requestBody.filter((value, key) => !isEmptyValue(value) || requestBodyInclusionSetting.get(key)).toJS()
+        req.requestBody = requestBody
+          .map(
+            (val) => {
+              if (Map.isMap(val)) {
+                return val.get("value")
+              }
+              return val
+            }
+          )
+          .filter(
+            (value, key) => (Array.isArray(value) 
+              ? value.length !== 0 
+              : !isEmptyValue(value)
+            ) || requestBodyInclusionSetting.get(key)
+          )
+          .toJS()
       } else{
         req.requestBody = requestBody
       }
     }
 
-    let parsedRequest = Object.assign({}, req)
-    parsedRequest = fn.buildRequest(parsedRequest)
-
-    specActions.setRequest(req.pathName, req.method, parsedRequest)
-
-    let requestInterceptorWrapper = function(r) {
-      let mutatedRequest = requestInterceptor.apply(this, [r])
+    let requestInterceptorWrapper = async (r) => {
+      fn.applySecurities(r, req);
+      specActions.setRequest(req.pathName, req.method, r)
+      let mutatedRequest = await requestInterceptor.apply(this, [r])
       let parsedMutatedRequest = Object.assign({}, mutatedRequest)
       specActions.setMutatedRequest(req.pathName, req.method, parsedMutatedRequest)
       return mutatedRequest

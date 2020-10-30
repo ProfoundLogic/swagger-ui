@@ -66,18 +66,21 @@ export default class StandaloneLayout extends React.Component {
               </Row>
             }
 
-            {hasServers || hasSchemes || hasSecurityDefinitions ? (
+            {/* Moved Authorized outside -- PJS always hides it anyways */}
+            {hasServers || hasSchemes ? (
               <div className="scheme-container">
                 <Col className="schemes wrapper" mobile={12}>
                   {hasServers ? (<ServersContainer />) : null}
                   {hasSchemes ? (<SchemesContainer />) : null}
-                  {hasSecurityDefinitions ? (<AuthorizeBtnContainer />) : null}
                 </Col>
               </div>
             ) : null}
 
+            {/* It has to be here, but PJS always hides it */}
+            {hasSecurityDefinitions ? (<AuthorizeBtnContainer />) : null}
+
             <Row className="pjs-main-container">
-              {isSpecificRoute ? null : <CategoryFilter /> }
+              {isSpecificRoute ? null : <CategoryFilter />}
 
               <BaseLayout />
 

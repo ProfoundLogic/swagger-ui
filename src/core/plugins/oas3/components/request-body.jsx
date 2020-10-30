@@ -38,6 +38,7 @@ const RequestBody = ({
   requestBody,
   requestBodyValue,
   requestBodyInclusionSetting,
+  requestBodyErrors,
   getComponent,
   getConfigs,
   specSelectors,
@@ -52,6 +53,19 @@ const RequestBody = ({
 }) => {
   const handleFile = (e) => {
     onChange(e.target.files[0])
+  }
+  const setIsIncludedOptions = (key) => {
+    let options = {
+      key,
+      shouldDispatchInit: false,
+      defaultValue: true
+    }
+    let currentInclusion = requestBodyInclusionSetting.get(key, "no value")
+    if (currentInclusion === "no value") {
+      options.shouldDispatchInit = true
+      // future: can get/set defaultValue from a config setting
+    }
+    return options
   }
 
   const Markdown = getComponent("Markdown", true)
@@ -75,6 +89,7 @@ const RequestBody = ({
   const handleExamplesSelect = (key /*, { isSyntheticChange } */) => {
     updateActiveExamplesKey(key)
   }
+  requestBodyErrors = List.isList(requestBodyErrors) ? requestBodyErrors : List()
 
   if(!mediaTypeValue.size) {
     return null
@@ -119,20 +134,27 @@ const RequestBody = ({
       <table>
         <tbody>
           {
-            bodyProperties.map((prop, key) => {
+             Map.isMap(bodyProperties) && bodyProperties.entrySeq().map(([key, prop]) => {
+              if (prop.get("readOnly")) return
+
               let commonExt = showCommonExtensions ? getCommonExtensions(prop) : null
               const required = schemaForMediaType.get("required", List()).includes(key)
               const type = prop.get("type")
               const format = prop.get("format")
               const description = prop.get("description")
-              const currentValue = requestBodyValue.get(key)
+              const currentValue = requestBodyValue.getIn([key, "value"])
+              const currentErrors = requestBodyValue.getIn([key, "errors"]) || requestBodyErrors
 
               let initialValue = prop.get("default") || prop.get("example") || ""
 
-              if (initialValue === "" && type === "object") {
-                initialValue = getSampleSchema(prop, false, {
-                  includeWriteOnly: true
-                })
+              if (initialValue === "") {
+                if(type === "object") {
+                  initialValue = getSampleSchema(prop, false, {
+                    includeWriteOnly: true
+                  })
+                } else if(type === "array") {
+                  initialValue = []
+                }
               }
 
               if (typeof initialValue !== "string" && type === "object") {
@@ -150,7 +172,7 @@ const RequestBody = ({
                         <div className="parameter__type">
                           { type }
                           { format && <span className="prop-format">(${format})</span>}
-                          {!showCommonExtensions || !commonExt.size ? null : commonExt.map((v, key) => <ParameterExt key={`${key}-${v}`} xKey={key} xVal={v} />)}
+                          {!showCommonExtensions || !commonExt.size ? null : commonExt.entrySeq().map(([key, v]) => <ParameterExt key={`${key}-${v}`} xKey={key} xVal={v} />)}
                         </div>
                         <div className="parameter__deprecated">
                           { prop.get("deprecated") ? "deprecated": null }
@@ -166,6 +188,8 @@ const RequestBody = ({
                             description={key}
                             getComponent={getComponent}
                             value={currentValue === undefined ? initialValue : currentValue}
+                            required = { required }
+                            errors = { currentErrors }
                             onChange={(value) => {
                               onChange(value, [key])
                             }}
@@ -173,8 +197,9 @@ const RequestBody = ({
                           {required ? null : (
                             <ParameterIncludeEmpty
                               onChange={(value) => onChangeIncludeEmpty(key, value)}
-                              isIncluded={requestBodyInclusionSetting.get(key)}
-                              isDisabled={!isEmptyValue(currentValue)}
+                              isIncluded={requestBodyInclusionSetting.get(key) || false}
+                              isIncludedOptions={setIsIncludedOptions(key)}
+                              isDisabled={Array.isArray(currentValue) ? currentValue.length !== 0 : !isEmptyValue(currentValue)}
                             />
                           )}
                         </div> : null }
@@ -209,6 +234,7 @@ const RequestBody = ({
         <div>
           <RequestBodyEditor
             value={requestBodyValue}
+            errors={requestBodyErrors}
             defaultValue={getDefaultRequestBodyValue(
               requestBody,
               contentType,
@@ -230,6 +256,7 @@ const RequestBody = ({
           example={
             <HighlightCode
               className="body-param__example"
+              getConfigs={getConfigs}
               value={stringify(requestBodyValue) || getDefaultRequestBodyValue(
                 requestBody,
                 contentType,
@@ -246,6 +273,7 @@ const RequestBody = ({
         <Example
           example={examplesForMediaType.get(activeExamplesKey)}
           getComponent={getComponent}
+          getConfigs={getConfigs}
         />
       ) : null
     }
@@ -256,6 +284,7 @@ RequestBody.propTypes = {
   requestBody: ImPropTypes.orderedMap.isRequired,
   requestBodyValue: ImPropTypes.orderedMap.isRequired,
   requestBodyInclusionSetting: ImPropTypes.Map.isRequired,
+  requestBodyErrors: ImPropTypes.list.isRequired,
   getComponent: PropTypes.func.isRequired,
   getConfigs: PropTypes.func.isRequired,
   fn: PropTypes.object.isRequired,

@@ -14,11 +14,12 @@ const result = configBuilder(
   {
     entry: {
       "swagger-ui": [
-        "./src/core/index.js"
+        "./src/index.js",
       ],
     },
 
     output: {
+      globalObject: "this",
       library: "SwaggerUICore",
     },
   }

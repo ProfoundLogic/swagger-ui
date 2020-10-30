@@ -124,3 +124,18 @@ textarea.body-param__text
 {
     padding: 10px;
 }
+
+.auth-wrapper>.btn.authorize
+{
+    display: none;
+}
+
+.response-controls
+{
+    padding-top: unset;
+}
+
+.response-col_description__inner>.renderedMarkdown>p
+{
+    margin: 0em 0em .5em 0em;
+}

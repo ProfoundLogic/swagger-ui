@@ -5,6 +5,7 @@ import ImPropTypes from "react-immutable-proptypes"
 
 const braceOpen = "{"
 const braceClose = "}"
+const propClass = "property"
 
 export default class ObjectModel extends Component {
   static propTypes = {
@@ -40,11 +41,15 @@ export default class ObjectModel extends Component {
     let additionalProperties = schema.get("additionalProperties")
     let title = schema.get("title") || displayName || name
     let requiredProperties = schema.get("required")
+    let infoProperties = schema
+      .filter( ( v, key) => ["maxProperties", "minProperties", "nullable", "example"].indexOf(key) !== -1 )
+    let deprecated = schema.get("deprecated")
 
     const JumpToPath = getComponent("JumpToPath", true)
     const Markdown = getComponent("Markdown", true)
     const Model = getComponent("Model")
     const ModelCollapse = getComponent("ModelCollapse")
+    const Property = getComponent("Property")
 
     const JumpToPathSection = () => {
       return <span className="model-jump-to-path"><JumpToPath specPath={specPath} /></span>
@@ -87,6 +92,18 @@ export default class ObjectModel extends Component {
                       <Markdown source={ description } />
                     </td>
                   </tr>
+              }
+              {
+                !deprecated ? null :
+                  <tr className={"property"}>
+                    <td>
+                      deprecated:
+                    </td>
+                    <td>
+                      true
+                    </td>
+                  </tr>
+               
               }
               {
                 !(properties && properties.size) ? null : properties.entrySeq().filter(
@@ -217,6 +234,9 @@ export default class ObjectModel extends Component {
         </span>
         <span className="brace-close">{ braceClose }</span>
       </ModelCollapse>
+      {
+        infoProperties.size ? infoProperties.entrySeq().map( ( [ key, v ] ) => <Property key={`${key}-${v}`} propKey={ key } propVal={ v } propClass={ propClass } />) : null
+      }
     </span>
   }
 }
