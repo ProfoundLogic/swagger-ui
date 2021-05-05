@@ -62,7 +62,9 @@
         plugins: [
           SwaggerUIBundle.plugins.DownloadUrl
         ],
-        layout: "StandaloneLayout"
+        layout: "StandaloneLayout",
+        // Syntax highlighting causes severe rendering performance issue with non-trival payload size.
+        syntaxHighlight: false
       })
       // End Swagger UI call region
 
