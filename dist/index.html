@@ -91,7 +91,7 @@
           setTimeout(() => {
             window.parent.swaggerTestRetryMax = 10;
             url = ui.specSelectors.url().split("?")[0];
-            url += "?method=" + encodeURI(routeInfo["method"]) + "&path=" + encodeURI(routeInfo["path"]) + "&modfile=" + encodeURI(routeInfo["modfile"]) + "&routeKey=" + encodeURI(routeInfo["routeKey"]);
+            url += "?method=" + routeInfo["method"] + "&path=" + routeInfo["path"] + "&modfile=" + routeInfo["modfile"] + "&routeKey=" + routeInfo["routeKey"];
             ui.specActions.updateUrl(url);
             ui.specActions.download();
           }, (delayLoadTime * 1000));
