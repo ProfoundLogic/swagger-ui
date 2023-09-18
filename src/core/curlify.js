@@ -32,7 +32,7 @@ export default function curl( request ){
     for( let p of request.get("headers").entries() ){
       let [ h,v ] = p
       curlified.push( "-H " )
-      curlified.push( `"${h}: ${v.replace(/\$/g, "\\$")}"` )
+      curlified.push( `"${h}: ${v.replace(/\$/g, "\\$").replace(/"/g, "\\\"")}"` )
       isMultipartFormDataRequest = isMultipartFormDataRequest || /^content-type$/i.test(h) && /^multipart\/form-data$/i.test(v)
     }
   }
@@ -52,7 +52,7 @@ export default function curl( request ){
       curlified.push( "-d" )
       let reqBody = request.get("body")
       if (!Map.isMap(reqBody)) {
-        curlified.push( JSON.stringify( request.get("body") ).replace(/\\n/g, "").replace(/\$/g, "\\$") )
+        curlified.push( JSON.stringify( request.get("body") ).replace(/\\n/g, "").replace(/\$/g, "\\$").replace(/\\t/g, "") )
       } else {
         let curlifyToJoin = []
         for (let [k, v] of request.get("body").entrySeq()) {
@@ -60,7 +60,7 @@ export default function curl( request ){
           if (v instanceof win.File) {
             curlifyToJoin.push(`"${extractedKey}":{"name":"${v.name}"${v.type ? `,"type":"${v.type}"` : ""}}`)
           } else {
-            curlifyToJoin.push(`"${extractedKey}":${JSON.stringify(v).replace(/\\n/g, "").replace("$", "\\$")}`)
+            curlifyToJoin.push(`"${extractedKey}":${JSON.stringify(v).replace(/\\n/g, "").replace("$", "\\$").replace(/\\t/g, "")}`)
           }
         }
         curlified.push(`{${curlifyToJoin.join()}}`)
