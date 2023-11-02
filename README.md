@@ -36,3 +36,5 @@ Increase the version in the /package.json file, commit, and push that change alo
 
 After you commit and push your work to the profoundjs-swagger-ui master branch you can run `swagger-ui-dist-package/deploy.sh --publish`
 
+You will need an NPM access token. For example, get or request someone create you a Granular Access token with write access to profoundjs-swagger-ui. The, store that token someone that NPM knows to look, e.g. in `~/.npmrc` as, e.g.:
+`//registry.npmjs.org/:_authToken=npm_783947238947298473298479283`
